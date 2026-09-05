@@ -26,8 +26,8 @@ export default function Dashboard() {
       <div className="max-w-6xl mx-auto px-6 py-8">
         
         <h1 className="text-2xl font-bold text-white mb-8">
-          👋 Bonjour, {user?.email}
-        </h1>
+    Bonjour, {user?.name || user?.email}
+    </h1>
 
         {/* Stats Cards */}
         <div className="grid grid-cols-3 gap-6 mb-8">

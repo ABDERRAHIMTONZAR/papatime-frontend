@@ -5,6 +5,7 @@ import { useNavigate } from 'react-router-dom';
 export default function Login() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [name, setName] = useState('');
   const [isRegister, setIsRegister] = useState(false);
   const [error, setError] = useState('');
   const { login, register } = useAuth();
@@ -14,8 +15,9 @@ export default function Login() {
     e.preventDefault();
     try {
       if (isRegister) {
-        await register(email, password);
-      } else {
+if (isRegister) {
+  await register(email, password, name);
+}      } else {
         await login(email, password);
       }
       navigate('/');
@@ -42,6 +44,20 @@ export default function Login() {
         )}
 
         <form onSubmit={handleSubmit} className="space-y-4">
+            {isRegister && (
+  <div>
+    <label className="text-gray-400 text-sm mb-1 block">Nom complet</label>
+    <input
+      type="text"
+      value={name}
+      onChange={(e) => setName(e.target.value)}
+      className="w-full bg-gray-800 text-white px-4 py-3 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500"
+      placeholder="Abderrahim Tonzar"
+      required
+    />
+  </div>
+)}
+
           <div>
             <label className="text-gray-400 text-sm mb-1 block">Email</label>
             <input

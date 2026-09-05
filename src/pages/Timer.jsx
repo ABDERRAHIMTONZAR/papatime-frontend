@@ -95,8 +95,7 @@ export default function Timer() {
   return (
     <div className="min-h-screen bg-gray-950">
       <Navbar />
-      <div className="max-w-3xl mx-auto px-6 py-12">
-
+        <div className="max-w-3xl mx-auto px-4 md:px-6 py-8 md:py-12">
         <h1 className="text-2xl font-bold text-white mb-8">⏱ Timer</h1>
 
         <div className="bg-gray-900 rounded-2xl p-8 mb-8">

@@ -82,8 +82,7 @@ export default function Projects() {
   return (
     <div className="min-h-screen bg-gray-950">
       <Navbar />
-      <div className="max-w-4xl mx-auto px-6 py-8">
-
+<div className="max-w-4xl mx-auto px-4 md:px-6 py-6 md:py-8">
         <div className="flex items-center justify-between mb-8">
           <h1 className="text-2xl font-bold text-white">📁 Projets</h1>
           <button

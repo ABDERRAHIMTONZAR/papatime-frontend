@@ -6,6 +6,7 @@ import Timer from './pages/Timer';
 import TimeEntries from './pages/TimeEntries';
 import Projects from './pages/Projects';
 import { ToastProvider } from './context/ToastContext';
+import Register from './pages/Register';
 
 const PrivateRoute = ({ children }) => {
   const { user, loading } = useAuth();
@@ -24,7 +25,8 @@ function App() {
 
       <BrowserRouter>
         <Routes>
-          <Route path="/login" element={<Login />} />
+    <Route path="/login" element={<Login />} />
+    <Route path="/register" element={<Register />} />
           <Route path="/" element={
             <PrivateRoute>
               <Dashboard />

@@ -30,8 +30,8 @@ export default function Dashboard() {
     </h1>
 
         {/* Stats Cards */}
-        <div className="grid grid-cols-3 gap-6 mb-8">
-          <div className="bg-gray-900 rounded-2xl p-6">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">      
+        <div className="bg-gray-900 rounded-2xl p-6">
             <div className="flex items-center gap-3 mb-2">
               <FiClock className="text-indigo-400 text-xl" />
               <span className="text-gray-400">Aujourd'hui</span>

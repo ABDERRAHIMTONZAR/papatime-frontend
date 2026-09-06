@@ -1,6 +1,6 @@
-
 import { useState, useEffect } from 'react';
 import { useAuth } from '../context/AuthContext';
+import { useNavigate } from 'react-router-dom';
 import { FiClock, FiActivity, FiPlay } from 'react-icons/fi';
 import api from '../services/api';
 import Navbar from '../components/Navbar';
@@ -14,11 +14,20 @@ const formatDuration = (seconds) => {
 
 export default function Dashboard() {
   const { user } = useAuth();
+  const navigate = useNavigate();
   const [data, setData] = useState(null);
 
-  useEffect(() => {
-    api.get('/dashboard').then(res => setData(res.data));
-  }, []);
+ useEffect(() => {
+  if (user?.role === 'ADMIN') {
+    navigate('/admin');
+    return;
+  }
+  if (user?.role === 'SUPER_ADMIN') {
+    navigate('/super-admin');
+    return;
+  }
+  api.get('/dashboard').then(res => setData(res.data));
+}, [user]);
 
   return (
     <div className="min-h-screen bg-gray-950">
@@ -26,12 +35,11 @@ export default function Dashboard() {
       <div className="max-w-6xl mx-auto px-6 py-8">
         
         <h1 className="text-2xl font-bold text-white mb-8">
-    Bonjour, {user?.name || user?.email}
-    </h1>
+          Bonjour, {user?.name || user?.email}
+        </h1>
 
-        {/* Stats Cards */}
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">      
-        <div className="bg-gray-900 rounded-2xl p-6">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+          <div className="bg-gray-900 rounded-2xl p-6">
             <div className="flex items-center gap-3 mb-2">
               <FiClock className="text-indigo-400 text-xl" />
               <span className="text-gray-400">Aujourd'hui</span>
@@ -62,7 +70,6 @@ export default function Dashboard() {
           </div>
         </div>
 
-        {/* Recent Activity */}
         <div className="bg-gray-900 rounded-2xl p-6">
           <h2 className="text-white font-semibold text-lg mb-4">Activité récente</h2>
           {data?.recentEntries?.length === 0 && (

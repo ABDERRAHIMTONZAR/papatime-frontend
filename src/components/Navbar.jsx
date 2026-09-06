@@ -1,7 +1,8 @@
 import { useState } from 'react';
 import { useAuth } from '../context/AuthContext';
 import { useNavigate, useLocation } from 'react-router-dom';
-import { FiClock, FiGrid, FiList, FiFolderPlus, FiLogOut, FiMenu, FiX } from 'react-icons/fi';
+import { FiClock, FiGrid, FiList, FiFolderPlus, FiLogOut, FiMenu, FiX, FiSettings, FiGlobe } from 'react-icons/fi';
+import { FiFileText } from 'react-icons/fi';
 
 export default function Navbar() {
   const { user, logout } = useAuth();
@@ -30,9 +31,13 @@ export default function Navbar() {
     );
   };
 
+  const isAdmin = user?.role === 'ADMIN';
+  const isSuperAdmin = user?.role === 'SUPER_ADMIN';
+
   return (
     <nav className="bg-gray-900 border-b border-gray-800 px-6 py-4">
       <div className="flex items-center justify-between">
+
         {/* Logo */}
         <div className="flex items-center gap-2">
           <FiClock className="text-indigo-400 text-2xl" />
@@ -41,10 +46,24 @@ export default function Navbar() {
 
         {/* Desktop menu */}
         <div className="hidden md:flex items-center gap-2">
-          {navItem('/', <FiGrid />, 'Dashboard')}
-          {navItem('/timer', <FiClock />, 'Timer')}
-          {navItem('/entries', <FiList />, 'Entrées')}
-          {navItem('/projects', <FiFolderPlus />, 'Projets')}
+          {isSuperAdmin ? (
+            navItem('/super-admin', <FiGlobe />, 'Super Admin')
+          ) : isAdmin ? (
+            <>
+              {navItem('/admin', <FiSettings />, 'Admin')}
+              {navItem('/timer', <FiClock />, 'Timer')}
+              {navItem('/entries', <FiList />, 'Entrées')}
+              {navItem('/projects', <FiFolderPlus />, 'Projets')}
+              {navItem('/rapport', <FiFileText />, 'Rapport IA')}
+            </>
+          ) : (
+            <>
+              {navItem('/', <FiGrid />, 'Dashboard')}
+              {navItem('/timer', <FiClock />, 'Timer')}
+              {navItem('/entries', <FiList />, 'Entrées')}
+              {navItem('/projects', <FiFolderPlus />, 'Projets')}
+            </>
+          )}
         </div>
 
         {/* Desktop user */}
@@ -62,15 +81,30 @@ export default function Navbar() {
         >
           {menuOpen ? <FiX /> : <FiMenu />}
         </button>
+
       </div>
 
       {/* Mobile menu */}
       {menuOpen && (
         <div className="md:hidden mt-4 flex flex-col gap-2">
-          {navItem('/', <FiGrid />, 'Dashboard')}
-          {navItem('/timer', <FiClock />, 'Timer')}
-          {navItem('/entries', <FiList />, 'Entrées')}
-          {navItem('/projects', <FiFolderPlus />, 'Projets')}
+          {isSuperAdmin ? (
+            navItem('/super-admin', <FiGlobe />, 'Super Admin')
+          ) : isAdmin ? (
+            <>
+              {navItem('/admin', <FiSettings />, 'Admin')}
+              {navItem('/timer', <FiClock />, 'Timer')}
+              {navItem('/entries', <FiList />, 'Entrées')}
+              {navItem('/projects', <FiFolderPlus />, 'Projets')}
+              {navItem('/rapport', <FiFileText />, 'Rapport IA')}
+            </>
+          ) : (
+            <>
+              {navItem('/', <FiGrid />, 'Dashboard')}
+              {navItem('/timer', <FiClock />, 'Timer')}
+              {navItem('/entries', <FiList />, 'Entrées')}
+              {navItem('/projects', <FiFolderPlus />, 'Projets')}
+            </>
+          )}
           <div className="border-t border-gray-800 pt-3 mt-2">
             <span className="text-gray-400 text-sm block mb-2">{user?.name || user?.email}</span>
             <button onClick={handleLogout} className="text-red-400 hover:text-red-300 flex items-center gap-1">
@@ -79,6 +113,7 @@ export default function Navbar() {
           </div>
         </div>
       )}
+
     </nav>
   );
 }

@@ -92,11 +92,8 @@ export default function Login() {
         </form>
 
         <p className="text-gray-400 text-center mt-6 text-sm">
-          Pas encore de compte ?
-          <Link to="/register" className="text-indigo-400 ml-1 hover:underline">
-            S'inscrire
-          </Link>
-        </p>
+        Contactez votre administrateur pour créer un compte.
+      </p>
 
       </div>
     </div>

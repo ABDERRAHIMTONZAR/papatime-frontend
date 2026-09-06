@@ -3,6 +3,7 @@ import { FiPlay, FiSquare } from 'react-icons/fi';
 import api from '../services/api';
 import Navbar from '../components/Navbar';
 import { useToast } from '../context/ToastContext';
+import { useAuth } from '../context/AuthContext';
 
 const formatTime = (seconds) => {
   const h = String(Math.floor(seconds / 3600)).padStart(2, '0');
@@ -21,7 +22,7 @@ export default function Timer() {
   const [activeEntry, setActiveEntry] = useState(null);
   const [elapsed, setElapsed] = useState(0);
   const intervalRef = useRef(null);
-
+const { user } = useAuth();
   useEffect(() => {
     api.get('/projets').then(res => setProjets(res.data));
     api.get('/dashboard').then(res => {
@@ -35,14 +36,19 @@ export default function Timer() {
   }, []);
 
   // Charger tâches quand projet change
-  useEffect(() => {
-    if (projetId) {
-      api.get(`/taches/${projetId}`).then(res => setTaches(res.data));
-    } else {
-      setTaches([]);
-      setTacheId('');
-    }
-  }, [projetId]);
+useEffect(() => {
+  if (projetId) {
+    api.get(`/taches/${projetId}`).then(res => {
+      const filtered = res.data.filter(t => 
+        !t.assignedTo || t.assignedTo.id === user?.id
+      );
+      setTaches(filtered);
+    });
+  } else {
+    setTaches([]);
+    setTacheId('');
+  }
+}, [projetId]);
 
   useEffect(() => {
     if (activeEntry) {

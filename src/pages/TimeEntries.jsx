@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { FiEdit2, FiTrash2, FiPlus } from 'react-icons/fi';
+import { FiDownload , FiTrash2, FiPlus } from 'react-icons/fi';
 import api from '../services/api';
 import Navbar from '../components/Navbar';
 
@@ -50,7 +50,35 @@ export default function TimeEntries() {
     acc[date].push(entry);
     return acc;
   }, {});
+const exportCSV = () => {
+  const rows = [
+    ['Description', 'Projet', 'Tâche', 'Date', 'Durée (secondes)', 'Durée (hh:mm:ss)']
+  ];
 
+  entries.forEach(entry => {
+    const h = String(Math.floor(entry.duration / 3600)).padStart(2, '0');
+    const m = String(Math.floor((entry.duration % 3600) / 60)).padStart(2, '0');
+    const s = String(entry.duration % 60).padStart(2, '0');
+    rows.push([
+      entry.description || 'Sans description',
+      entry.projet?.name || 'Sans projet',
+      entry.tache?.name || 'Sans tâche',
+      new Date(entry.startTime).toLocaleDateString('fr-FR'),
+      entry.duration,
+      `${h}:${m}:${s}`
+    ]);
+  });
+
+  const csv = rows.map(r => r.join(',')).join('\n');
+  const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+  const url = URL.createObjectURL(blob);
+  const link = document.createElement('a');
+  link.href = url;
+  link.download = `papatime-export-${new Date().toISOString().split('T')[0]}.csv`;
+  link.click();
+  URL.revokeObjectURL(url);
+  toast.success('Export téléchargé !', '📥');
+};
   return (
     <div className="min-h-screen bg-gray-950">
       <Navbar />
@@ -63,8 +91,18 @@ export default function TimeEntries() {
           >
             <FiPlus /> Ajouter manuellement
           </button>
+          
         </div>
+          <button
+    onClick={exportCSV}
+    className="bg-gray-700 hover:bg-gray-600 text-white px-4 py-2 rounded-lg flex items-center gap-2 transition text-sm"
+  >
+    <FiDownload /> Export CSV
+  </button>
+<div className="flex gap-3">
 
+ 
+</div>
         {/* Formulaire manuel */}
         {showManual && (
           <div className="bg-gray-900 rounded-2xl p-6 mb-6">

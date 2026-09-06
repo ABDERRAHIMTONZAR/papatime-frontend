@@ -65,15 +65,15 @@ export default function Projects() {
     api.get("/projets").then((res) => setProjets(res.data));
   };
 
-  const fetchEquipes = async () => {
-    const res = await api.get("/equipes/all");
-    setEquipes(res.data);
-  };
+const fetchEquipes = async () => {
+  const res = await api.get('/equipes');
+  setEquipes([res.data]); // Son équipe seulement
+};
 
-  const fetchMembres = async () => {
-    const res = await api.get("/equipes");
-    setMembres(res.data?.members || []);
-  };
+const fetchMembres = async () => {
+  const res = await api.get('/equipes');
+  setMembres(res.data?.members || []);
+};
 
   const fetchTaches = async (projetId) => {
     const res = await api.get(`/taches/${projetId}`);

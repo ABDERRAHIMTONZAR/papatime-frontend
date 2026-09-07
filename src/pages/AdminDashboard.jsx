@@ -38,6 +38,11 @@ export default function AdminDashboard() {
       setLoading(false);
     }
   };
+  const getInvitationLink = (code) => {
+  return `${window.location.origin}/register?code=${code}`;
+};
+
+
 const deleteInvitation = async (id) => {
   try {
     await api.delete(`/equipes/invitations/${id}`);
@@ -69,12 +74,12 @@ const deleteInvitation = async (id) => {
     }
   };
 
-  const copyLink = (link, id) => {
-    navigator.clipboard.writeText(link);
-    setCopied(id);
-    toast.success('Lien copié !', '📋');
-    setTimeout(() => setCopied(null), 2000);
-  };
+const copyLink = (code, id) => {
+  navigator.clipboard.writeText(getInvitationLink(code));
+  setCopied(id);
+  toast.success('Lien copié !', '📋');
+  setTimeout(() => setCopied(null), 2000);
+};
 
   if (loading) return (
     <div className="min-h-screen bg-gray-950 flex items-center justify-center">
@@ -222,13 +227,13 @@ const deleteInvitation = async (id) => {
                     {inv.usedAt ? (
                       <span className="text-green-400 text-xs">Utilisé par {inv.usedBy?.name || inv.usedBy?.email}</span>
                     ) : (
-                      <button
-                        onClick={() => copyLink(inv.link, inv.id)}
-                        className="text-indigo-400 hover:text-indigo-300 flex items-center gap-1 text-sm transition"
-                      >
-                        {copied === inv.id ? <FiCheck /> : <FiCopy />}
-                        {copied === inv.id ? 'Copié !' : 'Copier lien'}
-                      </button>
+              <button
+    onClick={() => copyLink(inv.code, inv.id)}
+    className="text-indigo-400 hover:text-indigo-300 flex items-center gap-1 text-sm transition"
+  >
+    {copied === inv.id ? <FiCheck /> : <FiCopy />}
+    {copied === inv.id ? 'Copié !' : 'Copier lien'}
+  </button>
                     )}
                     <span className={`text-xs px-2 py-1 rounded-full ${inv.usedAt ? 'bg-green-500/20 text-green-400' : new Date() > new Date(inv.expiresAt) ? 'bg-red-500/20 text-red-400' : 'bg-yellow-500/20 text-yellow-400'}`}>
                       {inv.usedAt ? 'Utilisé' : new Date() > new Date(inv.expiresAt) ? 'Expiré' : 'En attente'}

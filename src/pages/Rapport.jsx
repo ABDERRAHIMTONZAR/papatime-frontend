@@ -36,20 +36,32 @@ export default function Rapport() {
     }
   };
 
-  const downloadPDF = () => {
-    const element = document.getElementById('rapport-content');
-    const opt = {
-      margin: 1,
-      filename: `rapport-${rapport.projet}-${new Date().toISOString().split('T')[0]}.pdf`,
-      image: { type: 'jpeg', quality: 0.98 },
-      html2canvas: { scale: 2 },
-      jsPDF: { unit: 'in', format: 'a4', orientation: 'portrait' }
-    };
-    import('html2pdf.js').then(html2pdf => {
-      html2pdf.default().set(opt).from(element).save();
-    });
-    toast.success('PDF téléchargé !', '📄');
+ const downloadPDF = () => {
+  const element = document.getElementById('rapport-content');
+  
+  // Clone l'élément avec style blanc
+  const clone = element.cloneNode(true);
+  clone.style.backgroundColor = '#ffffff';
+  clone.style.color = '#000000';
+  clone.style.padding = '20px';
+  document.body.appendChild(clone);
+
+  const opt = {
+    margin: 1,
+    filename: `rapport-${rapport.projet}-${new Date().toISOString().split('T')[0]}.pdf`,
+    image: { type: 'jpeg', quality: 0.98 },
+    html2canvas: { scale: 2, backgroundColor: '#ffffff' },
+    jsPDF: { unit: 'in', format: 'a4', orientation: 'portrait' }
   };
+  
+  import('html2pdf.js').then(html2pdf => {
+    html2pdf.default().set(opt).from(clone).save().then(() => {
+      document.body.removeChild(clone);
+    });
+  });
+  
+  toast.success('PDF téléchargé !', '📄');
+};
 
   const formatDuration = (seconds) => {
     const h = Math.floor(seconds / 3600);

@@ -1,20 +1,60 @@
-<<<<<<< HEAD
-# React + Vite
+# ⏱ PapaTime
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+> Outil de suivi du temps de travail interne pour Papa in Shape — permet aux équipes de tracker leur temps sur les projets et tâches en temps réel.
 
-Currently, two official plugins are available:
+🔗 **Live Demo** : [papatime-frontend.vercel.app](https://papatime-frontend.vercel.app)
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+## 🔐 Comptes Demo
 
-## React Compiler
+| Rôle | Email | Password |
+|------|-------|----------|
+| Super Admin | superadmin@gmail.com | SuperAdmin2025! |
+| Admin | admin1@gmail.com | Admin2025! |
+| Employee | employe1@gmail.com | Employee2025! |
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+## ✨ Fonctionnalités
 
-## Expanding the ESLint configuration
+- ⏱ **Timer** start/stop en temps réel
+- 👥 **Multi-user** : Super Admin / Admin / Employee
+- 📁 **Projets & Tâches** assignés par équipe
+- 🤖 **Rapport IA** (Groq LLM) — analyse intelligente des projets
+- 📊 **Dashboard** stats temps réel
+- 🔗 **Invitations** par code — onboarding simplifié
+- 📥 **Export CSV** des time entries
+- 📱 **Responsive** mobile
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
-=======
-# papatime-frontend
->>>>>>> 44feefb0a4c3fe82c612dfd853fa28320d519636
+## 🏗 Architecture
+SUPER ADMIN → crée équipes + admins
+ADMIN → crée projets + tâches + invite membres
+EMPLOYEE → enregistre son temps sur ses tâches
+
+
+## 🛠 Stack Technique
+
+| Couche | Tech |
+|--------|------|
+| Frontend | React + Vite + Tailwind CSS |
+| Backend | Node.js + Express |
+| Base de données | PostgreSQL (Supabase) |
+| ORM | Prisma 7 |
+| IA | Groq LLM |
+| Auth | JWT + bcrypt |
+| Deploy | Vercel |
+
+## 🚀 Installation locale
+
+```bash
+# Backend
+cd papatime-backend
+npm install
+npm run dev
+
+# Frontend  
+cd papatime-frontend
+npm install
+npm run dev
+```
+
+## 👨‍💻 Développé par
+
+**Abderrahim Tonzar** — [GitHub](https://github.com/ABDERRAHIMTONZAR) · [LinkedIn](https://linkedin.com/in/abderrahim-tonzar-11825230b)

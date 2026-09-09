@@ -5,6 +5,7 @@ import Navbar from '../components/Navbar';
 import { useToast } from '../context/ToastContext';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
+import rehypeRaw from 'rehype-raw';
 export default function Rapport() {
   const { toast } = useToast();
   const [projets, setProjets] = useState([]);
@@ -110,6 +111,7 @@ export default function Rapport() {
               <div className="text-gray-300 leading-relaxed prose prose-invert max-w-none">
 <ReactMarkdown 
   remarkPlugins={[remarkGfm]}
+  rehypePlugins={[rehypeRaw]}
   components={{
     table: ({node, ...props}) => (
       <table className="w-full border-collapse mb-4" {...props} />

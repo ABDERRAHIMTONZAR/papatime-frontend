@@ -1,11 +1,12 @@
 import { useState, useEffect } from 'react';
-import { FiFileText, FiRefreshCw } from 'react-icons/fi';
+import { FiFileText, FiRefreshCw, FiDownload } from 'react-icons/fi';
 import api from '../services/api';
 import Navbar from '../components/Navbar';
 import { useToast } from '../context/ToastContext';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import rehypeRaw from 'rehype-raw';
+
 export default function Rapport() {
   const { toast } = useToast();
   const [projets, setProjets] = useState([]);
@@ -35,6 +36,21 @@ export default function Rapport() {
     }
   };
 
+  const downloadPDF = () => {
+    const element = document.getElementById('rapport-content');
+    const opt = {
+      margin: 1,
+      filename: `rapport-${rapport.projet}-${new Date().toISOString().split('T')[0]}.pdf`,
+      image: { type: 'jpeg', quality: 0.98 },
+      html2canvas: { scale: 2 },
+      jsPDF: { unit: 'in', format: 'a4', orientation: 'portrait' }
+    };
+    import('html2pdf.js').then(html2pdf => {
+      html2pdf.default().set(opt).from(element).save();
+    });
+    toast.success('PDF téléchargé !', '📄');
+  };
+
   const formatDuration = (seconds) => {
     const h = Math.floor(seconds / 3600);
     const m = Math.floor((seconds % 3600) / 60);
@@ -46,9 +62,7 @@ export default function Rapport() {
       <Navbar />
       <div className="max-w-4xl mx-auto px-4 md:px-6 py-8">
 
-        <h1 className="text-2xl font-bold text-white mb-8">
-          Rapport IA
-        </h1>
+        <h1 className="text-2xl font-bold text-white mb-8">Rapport IA</h1>
 
         {/* Sélection projet */}
         <div className="bg-gray-900 rounded-2xl p-6 mb-6">
@@ -100,50 +114,60 @@ export default function Rapport() {
 
             {/* Rapport IA */}
             <div className="bg-gray-900 rounded-2xl p-6">
-              <div className="flex items-center gap-3 mb-4">
-                <div className="w-8 h-8 bg-indigo-600 rounded-full flex items-center justify-center">
-                  🤖
+              <div className="flex items-center justify-between mb-4">
+                <div className="flex items-center gap-3">
+                  <div className="w-8 h-8 bg-indigo-600 rounded-full flex items-center justify-center text-sm">
+                    🤖
+                  </div>
+                  <h2 className="text-white font-semibold text-lg">
+                    Analyse IA — {rapport.projet}
+                  </h2>
                 </div>
-                <h2 className="text-white font-semibold text-lg">
-                  Analyse IA — {rapport.projet}
-                </h2>
+                <button
+                  onClick={downloadPDF}
+                  className="bg-gray-700 hover:bg-gray-600 text-white px-4 py-2 rounded-lg flex items-center gap-2 text-sm transition"
+                >
+                  <FiDownload /> Télécharger PDF
+                </button>
               </div>
-              <div className="text-gray-300 leading-relaxed prose prose-invert max-w-none">
-<ReactMarkdown 
-  remarkPlugins={[remarkGfm]}
-  rehypePlugins={[rehypeRaw]}
-  components={{
-    table: ({node, ...props}) => (
-      <table className="w-full border-collapse mb-4" {...props} />
-    ),
-    th: ({node, ...props}) => (
-      <th className="border border-gray-600 px-3 py-2 text-left text-gray-300 bg-gray-800" {...props} />
-    ),
-    td: ({node, ...props}) => (
-      <td className="border border-gray-600 px-3 py-2 text-gray-300" {...props} />
-    ),
-    h2: ({node, ...props}) => (
-      <h2 className="text-white font-bold text-lg mt-6 mb-3" {...props} />
-    ),
-    h3: ({node, ...props}) => (
-      <h3 className="text-white font-semibold mt-4 mb-2" {...props} />
-    ),
-    strong: ({node, ...props}) => (
-      <strong className="text-white font-bold" {...props} />
-    ),
-    p: ({node, ...props}) => (
-      <p className="text-gray-300 mb-3" {...props} />
-    ),
-    li: ({node, ...props}) => (
-      <li className="text-gray-300 ml-4 mb-1" {...props} />
-    ),
-    hr: ({node, ...props}) => (
-      <hr className="border-gray-700 my-4" {...props} />
-    ),
-  }}
->
-  {rapport.rapport}
-</ReactMarkdown>                </div>
+
+              <div id="rapport-content" className="text-gray-300 leading-relaxed prose prose-invert max-w-none">
+                <ReactMarkdown
+                  remarkPlugins={[remarkGfm]}
+                  rehypePlugins={[rehypeRaw]}
+                  components={{
+                    table: ({node, ...props}) => (
+                      <table className="w-full border-collapse mb-4" {...props} />
+                    ),
+                    th: ({node, ...props}) => (
+                      <th className="border border-gray-600 px-3 py-2 text-left text-gray-300 bg-gray-800" {...props} />
+                    ),
+                    td: ({node, ...props}) => (
+                      <td className="border border-gray-600 px-3 py-2 text-gray-300" {...props} />
+                    ),
+                    h2: ({node, ...props}) => (
+                      <h2 className="text-white font-bold text-lg mt-6 mb-3" {...props} />
+                    ),
+                    h3: ({node, ...props}) => (
+                      <h3 className="text-white font-semibold mt-4 mb-2" {...props} />
+                    ),
+                    strong: ({node, ...props}) => (
+                      <strong className="text-white font-bold" {...props} />
+                    ),
+                    p: ({node, ...props}) => (
+                      <p className="text-gray-300 mb-3" {...props} />
+                    ),
+                    li: ({node, ...props}) => (
+                      <li className="text-gray-300 ml-4 mb-1" {...props} />
+                    ),
+                    hr: ({node, ...props}) => (
+                      <hr className="border-gray-700 my-4" {...props} />
+                    ),
+                  }}
+                >
+                  {rapport.rapport}
+                </ReactMarkdown>
+              </div>
             </div>
           </>
         )}
